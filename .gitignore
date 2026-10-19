@@ -1,5 +1,24 @@
+# secrets
 .env
+.env.*
+!.env.example
+
+# python
 venv/
 .venv/
 __pycache__/
-fitness.db
+*.pyc
+.pytest_cache/
+
+# database files
+*.db
+*.sqlite3
+
+# node
+node_modules/
+dist/
+
+# editor and OS files
+.vscode/
+.DS_Store
+Thumbs.db
