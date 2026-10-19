@@ -1,5 +1,7 @@
+import os
 from contextlib import asynccontextmanager
 
+from dotenv import load_dotenv
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
@@ -11,6 +13,16 @@ from coach_routes import router as coach_router
 from database import Base, SessionLocal, engine, get_db
 from exercise_library import sync_default_exercises
 from workout_routes import exercise_router, router as workout_router
+
+load_dotenv()
+
+# Comma-separated list of frontend addresses allowed to call this API.
+# No trailing slashes, for example: https://platelog.vercel.app
+CORS_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+    if origin.strip()
+]
 
 
 @asynccontextmanager
@@ -25,7 +37,7 @@ app = FastAPI(title="Fitness Tracker API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
